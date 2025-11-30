@@ -9,7 +9,8 @@ type Model = {
   first_name: string;
   last_name: string;
   gender: string;
-  age: number;
+  age?: number;
+  birthdate?: string;
   instagram: string;
   email: string;
   phone: string;
@@ -20,6 +21,18 @@ type Model = {
 };
 
 export default function Dashboard() {
+  // Functie om leeftijd te berekenen uit geboortedatum
+  function calculateAge(birthdate?: string): number | null {
+    if (!birthdate) return null;
+    const today = new Date();
+    const dob = new Date(birthdate);
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age;
+  }
   const navigate = useNavigate();
   const [models, setModels] = useState<Model[]>([]);
   const [filteredModels, setFilteredModels] = useState<Model[]>([]);
@@ -424,7 +437,7 @@ export default function Dashboard() {
                       {model.first_name} {model.last_name}
                     </h3>
                     <p style={{ color: '#6B7280', margin: 0, fontSize: 14 }}>
-                      {model.gender} • {model.age} jaar
+                      {model.gender} • {model.birthdate ? `${calculateAge(model.birthdate)} jaar` : 'Leeftijd onbekend'}
                     </p>
                   </div>
                 </div>
@@ -440,8 +453,8 @@ export default function Dashboard() {
                 </div>
 
                 <div style={{ marginBottom: 12 }}>
-                  <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: '#1F2B4A' }}>Woonplaats</p>
-                  <p style={{ margin: 0, color: '#6B7280', fontSize: 14 }}>{model.city}</p>
+                  <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: '#1F2B4A' }}>Geboortedatum</p>
+                  <p style={{ margin: 0, color: '#6B7280', fontSize: 14 }}>{model.birthdate ? new Date(model.birthdate).toLocaleDateString() : 'Onbekend'}</p>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
@@ -782,12 +795,12 @@ export default function Dashboard() {
 
               <div>
                 <label style={{ display: 'block', marginBottom: 8, fontSize: 14, fontWeight: 600, color: '#1F2B4A' }}>
-                  Leeftijd
+                  Geboortedatum
                 </label>
                 <input
-                  type="number"
-                  value={editFormData.age}
-                  onChange={(e: any) => setEditFormData({ ...editFormData, age: parseInt(e.target.value) || 0 })}
+                  type="date"
+                  value={editFormData.birthdate || ''}
+                  onChange={(e: any) => setEditFormData({ ...editFormData, birthdate: e.target.value })}
                   style={{
                     width: '100%',
                     padding: '12px 16px',
@@ -800,6 +813,9 @@ export default function Dashboard() {
                     boxSizing: 'border-box'
                   }}
                 />
+                <div style={{ fontSize: 13, color: '#6B7280', marginTop: 4 }}>
+                  Leeftijd: {editFormData.birthdate ? calculateAge(editFormData.birthdate) : 'Onbekend'} jaar
+                </div>
               </div>
             </div>
 

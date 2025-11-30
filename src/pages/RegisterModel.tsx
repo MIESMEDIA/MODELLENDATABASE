@@ -12,7 +12,8 @@ export default function RegisterModel() {
     email: '',
     phone: '',
     city: '',
-    photo_url: ''
+    photo_url: '',
+    birthdate: ''
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -143,7 +144,7 @@ Dit is een geautomatiseerd bericht. Je ontvangt deze e-mail omdat je je hebt aan
                 Geslacht *
               </label>
               <select required value={formData.gender} onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                style={{ width: '100%', padding: '12px 16px', background: '#E5DDD5', color: formData.gender ? '#1F2B4A' : '#9CA3AF', border: 'none', borderRadius: 8, fontSize: 15, fontFamily: 'inherit', cursor: 'pointer', boxSizing: 'border-box' }}
+                style={{ width: '100%', minWidth: '100%', padding: '12px 16px', background: '#E5DDD5', color: formData.gender ? '#1F2B4A' : '#9CA3AF', border: 'none', borderRadius: 8, fontSize: 15, fontFamily: 'inherit', cursor: 'pointer', boxSizing: 'border-box' }}
               >
                 <option value="">Selecteer geslacht</option>
                 <option value="man">Man</option>
@@ -154,9 +155,9 @@ Dit is een geautomatiseerd bericht. Je ontvangt deze e-mail omdat je je hebt aan
 
             <div>
               <label style={{ display: 'block', marginBottom: 8, fontSize: 15, color: '#1F2B4A', fontWeight: 500 }}>
-                Woonplaats *
+                Geboortedatum *
               </label>
-              <input required type="text" placeholder="Rotterdam" value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})}
+              <input required type="date" value={formData.birthdate || ''} onChange={(e) => setFormData({...formData, birthdate: e.target.value})}
                 style={{ width: '100%', padding: '12px 16px', background: '#E5DDD5', color: '#1F2B4A', border: 'none', borderRadius: 8, fontSize: 15, fontFamily: 'inherit', boxSizing: 'border-box' }}
               />
             </div>
