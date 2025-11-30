@@ -3,6 +3,14 @@ import { supabase } from '@/integrations/supabase/client';
 import MiesLogo from '@/components/MiesLogo';
 
 export default function RegisterModel() {
+  // Automatisch '/' toevoegen bij geboortedatum invoer
+  const handleBirthdateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/[^0-9]/g, '');
+    if (value.length > 2 && value[2] !== '/') value = value.slice(0,2) + '/' + value.slice(2);
+    if (value.length > 5 && value[5] !== '/') value = value.slice(0,5) + '/' + value.slice(5);
+    if (value.length > 10) value = value.slice(0,10);
+    setFormData({ ...formData, birthdate: value });
+  };
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -144,7 +152,7 @@ Dit is een geautomatiseerd bericht. Je ontvangt deze e-mail omdat je je hebt aan
                 Geslacht *
               </label>
               <select required value={formData.gender} onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                style={{ width: '100%', padding: '12px 16px', background: '#E5DDD5', color: formData.gender ? '#1F2B4A' : '#9CA3AF', border: 'none', borderRadius: 8, fontSize: 15, fontFamily: 'inherit', cursor: 'pointer', boxSizing: 'border-box', minWidth: '0' }}
+                style={{ width: '100%', minWidth: '100%', maxWidth: '100%', padding: '12px 16px', background: '#E5DDD5', color: formData.gender ? '#1F2B4A' : '#9CA3AF', border: 'none', borderRadius: 8, fontSize: 15, fontFamily: 'inherit', cursor: 'pointer', boxSizing: 'border-box' }}
               >
                 <option value="">Selecteer geslacht</option>
                 <option value="man">Man</option>
@@ -157,7 +165,8 @@ Dit is een geautomatiseerd bericht. Je ontvangt deze e-mail omdat je je hebt aan
               <label style={{ display: 'block', marginBottom: 8, fontSize: 15, color: '#1F2B4A', fontWeight: 500 }}>
                 Geboortedatum *
               </label>
-              <input required type="text" placeholder="dd/mm/jjjj" value={formData.birthdate || ''} onChange={(e) => setFormData({...formData, birthdate: e.target.value})}
+              <input required type="text" placeholder="dd/mm/jjjj" value={formData.birthdate || ''} onChange={handleBirthdateInput}
+                maxLength={10}
                 style={{ width: '100%', padding: '12px 16px', background: '#E5DDD5', color: '#1F2B4A', border: 'none', borderRadius: 8, fontSize: 15, fontFamily: 'inherit', boxSizing: 'border-box' }}
               />
             </div>
